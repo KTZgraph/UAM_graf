@@ -12,54 +12,29 @@ from random import randint
 from typing import Union, List
 
 
-class Point:
+
+
+
+class RandomCoodinatesInCircle:
+    # type: (Union[int, float], int)
     """
-    Punkt na p�aszczzynie dwuwymiarowej - okresla wierczholek
+    Returns random coordinates point in space
     """
+    def __init__(self, circleRadius, weight, dimension=2):
+        self.circleRadius = circleRadius
+        self.dimension = dimension
 
-    def __init__(self, x, y):
-        # type: (Union[int, float], Union[int, float]) -> None
-        self._x = x
-        self._y = y
-
-    @property  # getter atrybut pseudoprywatny
-    def x(self):
-        # type: () -> int
-        return self._x
-
-    @x.setter  # setter atrybut pseudoprywatny
-    def x(self, value):
-        # type: (Union[int, float]) -> None
-        self._x = value
+    def get_two_dimensional_coordinates(self):
+        """Returns random coordinates in 2D"""
+        x = randint(-1 * self.circleRadius, self.circleRadius)
+        y = randint(-1 * self.circleRadius, self.circleRadius)
 
 
-    @property
-    def y(self):  # setter atrybut pseudoprywatny
-        # type: ()-> Union[int, float]
-        return self._y
-
-    @y.setter
-    def y(self, value):  # getter atrybut pseudoprywatny
-        # type: (Union[int, float]) -> None
-        self._y = value
-
-    def __str__(self):
-        return f'Point: "x" : {self._x}, "y": {self._y}'
-
-    @staticmethod  # TODO: rozdzielic na klasy randomPoint i ConcretePoint
-    def fabricRandomPoint(circleRadius, weight):  # TODO: refaktor circleCalc
-        # type: (Union[int, float]) -> Point
+    def get_three_dimensional_coordinates(self):
         """
-        Fabryka tworząca losowy punkt znajdujący w przestrzeni miasta o zadanym okręgu
+        Returns random coordinates in 3D
         """
-        x = randint(-1 * circleRadius, circleRadius)
-        y = randint(-1 * circleRadius, circleRadius)
-
-        circleCalc = CircleCalculator(circleRadius, weight)  # uzyvie klasy w klasie - do refktoru
-        while not circleCalc.checkCoordinatesOfPointInCircle(x, y):
-            return Point(x, y)
-        else: #TODO poprawic - zwraca czasem None
-            Point.fabricRandomPoint(circleRadius, weight) # Rekurencja -  kolejny raz wywoluje funckje gdy �le wylosowano punkty
+        pass
 
 
 class CircleCalculator:
