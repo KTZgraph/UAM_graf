@@ -1,4 +1,8 @@
 #coding=utf-8
+"""
+Nie da się zrobic fabryki [!]
+bo każdy z punktów  przestrzeni ma inny interfejs
+"""
 from abc import ABCMeta, abstractmethod
 
 class PointBase(metaclass=ABCMeta):
@@ -7,25 +11,29 @@ class PointBase(metaclass=ABCMeta):
     """
     _dimension = None  # atrybut klasy
 
-    def get_dimension(self):
+    def getDimension(self):
+        """
+        Zwraca wymiar w jakim znajduje się punkt
+        """
         return self._dimension
 
     @abstractmethod
-    def get_distance_from_center(self):
+    def getDistanceFromCenter(self):
         """
         Zwraca odlełosć od środka przestrzeni
         """
         pass
 
+    @staticmethod
     @abstractmethod
-    def create_random_point(self):
+    def createRandomPointInSphere(sphere):
         """
         Tworzy punkt z losowymi współrzednymi znajdującymi się w przestrzeni
         """
         pass
 
     @abstractmethod
-    def create_conrete_point(self):
+    def createConretePoint(self):
         """
         Tworzy punkt z zadanymi parametrami
         """
@@ -35,6 +43,9 @@ class PointBase(metaclass=ABCMeta):
 class Point1D(PointBase):
     """
     Punkt na plaszczzynie jednoymiarowej
+
+    ¯\_(ツ)_/¯
+    @note: w sumie jednowymiarowy punkt też może znaleźć się w 2D i 3D sferze #TODO
     """
     _dimension = 1  # atrybut klasy
 
@@ -53,31 +64,32 @@ class Point1D(PointBase):
         # type: (Union[int, float]) -> None
         self._x = value
 
-    def get_distance_from_center(self):
+    def getDistanceFromCenter(self):
         """
         Zwraca odlełosć od środka przestrzeni
         """
         pass
 
-    def create_random_point(self):
-        """
-        Tworzy punkt z losowymi współrzednymi znajdującymi się w przestrzeni
-        """
-        pass
-
-    def create_conrete_point(self):
+    def createConretePoint(self, x):
         """
         Tworzy punkt z zadanymi parametrami
         """
         pass
 
     def __str__(self):
-        return f'Point1D: "x" : {self._x}'
+        return f'"x" : {self._x}'
+
+    @staticmethod
+    def createRandomPointInSphere(sphere):
+        pass
 
 
 class Point2D(Point1D):
     """
     Punkt na plaszczzynie dwuwymiarowej
+
+    ¯\_(ツ)_/¯
+    @note: w sumie dwuwymiarowy punkt też może znaleźć się w 2D i 3D sferze #TODO
     """
     _dimension = 2  # atrybut klasy
 
@@ -98,7 +110,11 @@ class Point2D(Point1D):
         self._y = value
 
     def __str__(self):
-        return f'Point2D: "x" : {self._x}, "y": {self._y}'
+        return super(Point2D, self).__str__() + f', "y": {self._y}'
+
+    @staticmethod
+    def createRandomPointInSphere(sphere):
+        pass
 
 
 class Point3D(Point2D):
@@ -123,26 +139,10 @@ class Point3D(Point2D):
         self._z = value
 
     def __str__(self):
-        return f'Point3D: "x" : {self._x}, "y": {self._y},  "z": {self._z}'
+        return super(Point3D, self).__str__() + f', "z": {self._z}'
 
-
-class RandomPointFactory(object):
-    """
-    Fabryka punktów w odpowiedniej przestrzeni
-    """
     @staticmethod
-    def createRandomPoint(dimension):
-        if dimension == 1:
-            return Point1D()
-        if dimension == 2:
-            return Point2D()
-        if dimension == 3:
-            return Point3D()
-        else:
-            print(f"Brak obsługi wymiaru: {dimension}")
+    def createRandomPointInSphere(sphere):
+        pass
 
 
-if __name__ == "__main__":
-    for i in range(1, 5):
-        p = RandomPointFactory.createRandomPoint(i)
-        print(p)
