@@ -17,6 +17,9 @@ class SphereBase(metaclass=ABCMeta):
         #type: (Union[float, int]) -> None
         self._radius = radius
 
+    def getRadius(self):
+        return self._radius
+
     def getDimension(self):
         # type: () -> Union[int, float]
         """

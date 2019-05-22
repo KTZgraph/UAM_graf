@@ -39,6 +39,10 @@ class PointBase(metaclass=ABCMeta):
         """
         pass
 
+    @abstractmethod
+    def __eq__(self, other):
+        # type (Point) -> bool
+        pass
 
 class Point1D(PointBase):
     """
@@ -79,6 +83,12 @@ class Point1D(PointBase):
     def __str__(self):
         return f'"x" : {self._x}'
 
+    def __eq__(self, other):
+        # type (Point) -> bool
+        if self.x == other.x:
+            return True
+        return False
+
     @staticmethod
     def createRandomPointInSphere(sphere):
         pass
@@ -115,6 +125,12 @@ class Point2D(Point1D):
     @staticmethod
     def createRandomPointInSphere(sphere):
         pass
+
+    def __eq__(self, other):
+        # type (Point) -> bool
+        if self.x == other.x and self.y == other.y:
+            return True
+        return False
 
 
 class Point3D(Point2D):

@@ -7,7 +7,6 @@ class SingletonInitialSettings:
     """
     _instances = {}
 
-    de
 
     def __call__(cls, cityCircleRadius=100, rangeRadiusTransmitter=10, totalNumberTransmitters = 20):
         # type: (Union[int, float], Union[int, float], int) -> None
