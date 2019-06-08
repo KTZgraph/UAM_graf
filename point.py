@@ -4,6 +4,10 @@ Nie da się zrobic fabryki [!]
 bo każdy z punktów  przestrzeni ma inny interfejs
 """
 from abc import ABCMeta, abstractmethod
+from random import uniform
+
+from sphere import Sphere2D
+
 
 class PointBase(metaclass=ABCMeta):
     """
@@ -24,19 +28,9 @@ class PointBase(metaclass=ABCMeta):
         """
         pass
 
-    @staticmethod
-    @abstractmethod
-    def createRandomPointInSphere(sphere):
-        """
-        Tworzy punkt z losowymi współrzednymi znajdującymi się w przestrzeni
-        """
-        pass
-
-    @abstractmethod
-    def createConretePoint(self):
-        """
-        Tworzy punkt z zadanymi parametrami
-        """
+    @classmethod
+    def fromRandom(cls, sphereRadius): #Kontruktor alternatywny
+        # type:(Union[int, float]) -> PointBase
         pass
 
     @abstractmethod
@@ -74,10 +68,9 @@ class Point1D(PointBase):
         """
         pass
 
-    def createConretePoint(self, x):
-        """
-        Tworzy punkt z zadanymi parametrami
-        """
+    @classmethod
+    def fromRandom(cls, sphereRadius): # Kontruktor alternatywny
+        # type:(Union[int, float]) -> PointBase
         pass
 
     def __str__(self):
@@ -88,10 +81,6 @@ class Point1D(PointBase):
         if self.x == other.x:
             return True
         return False
-
-    @staticmethod
-    def createRandomPointInSphere(sphere):
-        pass
 
 
 class Point2D(Point1D):
@@ -122,9 +111,21 @@ class Point2D(Point1D):
     def __str__(self):
         return super(Point2D, self).__str__() + f', "y": {self._y}'
 
-    @staticmethod
-    def createRandomPointInSphere(sphere):
-        pass
+    @classmethod
+    def fromRandom(cls, sphereRadius):
+        # type:(UInion[int, float]) -> Point2D
+        """
+        Losowy punkt w przestrzeni
+        """
+        sphere2D = Sphere2D(sphereRadius)
+        x, y = None, None
+        circleRange = sphereRadius**2
+
+        while not (sphere2D.isCoordinatesInSphere(x, y)):
+            x = uniform((-1*circleRange), circleRange)
+            y = uniform((-1*circleRange), circleRange)
+
+        return cls(x, y)
 
     def __eq__(self, other):
         # type (Point) -> bool
@@ -132,33 +133,5 @@ class Point2D(Point1D):
             return True
         return False
 
-
-class Point3D(Point2D):
-    """
-    Punkt na plaszczzynie dwuwymiarowej - okresla wierczholek
-    """
-    _dimension = 3  # atrybut klasy
-
-    def __init__(self, x=1, y=2, z=3):
-        # type: (Union[int, float], Union[int, float], Union[int, float]) -> None
-        self._z = z
-        super(Point3D, self).__init__(z)
-
-    @property  # getter atrybut pseudoprywatny
-    def z(self):
-        # type: () -> int
-        return self._z
-
-    @z.setter  # setter atrybut pseudoprywatny
-    def z(self, value):
-        # type: (Union[int, float]) -> None
-        self._z = value
-
-    def __str__(self):
-        return super(Point3D, self).__str__() + f', "z": {self._z}'
-
-    @staticmethod
-    def createRandomPointInSphere(sphere):
-        pass
 
 

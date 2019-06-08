@@ -2,7 +2,7 @@ from unittest import TestCase
 from mock import Mock
 from parameterized import parameterized, parameterized_class
 
-from transmitters2D import Point, CircleCalculator
+from transmitters import Point, CircleCalculator
 
 
 class PointTest(TestCase):
