@@ -76,7 +76,7 @@ class Graph2D(Graph1D):
     def __init__(self, spaceObj, point_list, weight):
         # type: (Sphere2D, Union[int, float], List[Point]) -> None
         # kompozycja
-        self.weight = None
+        self.weight = weight
         super(Graph2D, self).__init__(spaceObj, point_list, weight)
 
     def checkEdgeBetweenPointsExists(self, pointA, pointB):
