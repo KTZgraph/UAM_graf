@@ -81,7 +81,15 @@ var TransmittersVue = new Vue({
     },
     drawMatrix: function(){
           //rysowanie macierzy z XML
-        console.log(this.matrixXML)
+        // console.log(this.matrixXML)
+        parser = new DOMParser();
+        xmlDoc = parser.parseFromString(this.matrixXML,"text/xml");
+        // document.getElementById("demo").innerHTML =
+        console.log("AAAAAAAAAAAAAAAAA")
+        var rootElement = xmlDoc.getElementsByTagName("root");
+
+
+        console.log("A: ", rootElement[0].childNodes)
     }
   }
 })
