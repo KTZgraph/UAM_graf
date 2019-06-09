@@ -19,11 +19,13 @@ class GraphBase(metaclass=ABCMeta):
     _dimension = None  # atrybut klasy
 
     @abstractmethod
-    def __init__(self, spaceObj, point_list):
+    def __init__(self, spaceObj, point_list, weight):
         # type: (Union[SphereBase, Any], Union[int, float], List[PointBase]) -> None
 
         self.spaceObj = spaceObj  # przestrzeń
         self.point_list = point_list
+        self.weight = weight
+
 
     @abstractmethod
     def checkEdgeBetweenPointsExists(self, pointA, pointB):
@@ -50,13 +52,14 @@ class GraphBase(metaclass=ABCMeta):
 
 class Graph1D(GraphBase):
 
-    def __init__(self, spaceObj, point_list):
+    def __init__(self, spaceObj, point_list, weight):
         # type: (Sphere, Union[int, float], List[Point1D]) -> None
-        super(Graph1D, self).__init__(spaceObj, point_list)
+        super(Graph1D, self).__init__(spaceObj, point_list, weight)
 
     def checkEdgeBetweenPointsExists(self, pointA, pointB):
         # type: (Point, Point) -> bool
         pass
+
 
     def createGraphMatrix(self, weight):
         pass
@@ -70,23 +73,24 @@ class Graph1D(GraphBase):
 
 class Graph2D(Graph1D):
 
-    def __init__(self, spaceObj, point_list):
+    def __init__(self, spaceObj, point_list, weight):
         # type: (Sphere2D, Union[int, float], List[Point]) -> None
         # kompozycja
-        super(Graph2D, self).__init__(spaceObj, point_list)
+        self.weight = None
+        super(Graph2D, self).__init__(spaceObj, point_list, weight)
 
-    def checkEdgeBetweenPointsExists(self, pointA, pointB, weight):
+    def checkEdgeBetweenPointsExists(self, pointA, pointB):
         # type: (Point2D, Point2D) -> bool
         """
         Krawędź miedzy wierzchołkami jest wtedy, gdy odległośc między nimi <= (2*waga)**2
         """
-        if (abs(pointA.x - pointB.x)**2 + abs(pointA.y - pointB.y)**2) <= 4*(weight**2):
+        if (abs(pointA.x - pointB.x)**2 + abs(pointA.y - pointB.y)**2) <= 4*(self.weight**2):
             return True
-
         return False
 
+
     @classmethod
-    def fromEmptyPointsAndEmptySphere(cls, sphereRadius, totalPoints): #Konstruktor alternatywny
+    def fromEmptyPointsAndEmptySphere(cls, sphereRadius, totalPoints, weight): #Konstruktor alternatywny
         # type:(Union[int, float], int, Union[int, float] -> Graph2D
         """Sam generuje liste punktów i tworzy przestrzeń a nastepnie zwraca obiekt grafu
         """
@@ -95,18 +99,19 @@ class Graph2D(Graph1D):
             point_list.append(Point2D.fromRandom(sphereRadius))
 
         spaceObj = Sphere2D(sphereRadius)
-        return cls(spaceObj, point_list)
+        return cls(spaceObj, point_list, weight)
 
 
-    def createGraphMatrix(self, weight):
+    def createGraphMatrix(self):
         matrixSize = len(self.point_list)
         graphMatrix = np.zeros((matrixSize, matrixSize))
 
-
         for index1, point1 in enumerate(self.point_list):
             for index2, point2 in enumerate(self.point_list):
-                if self.checkEdgeBetweenPointsExists(point1, point2, weight):
-                    graphMatrix[index1][index2] = 1
+                if self.checkEdgeBetweenPointsExists(point1, point2) and point1 is not point2:
+                    # porówannie referencji obiektów - teoretycznie można wylosowac dwa punkty o tych samymch
+                    # wartościach i je trzeba rozpatrywać jako dwa osobne punkty
+                    graphMatrix[index1][index2] = int(1)
 
         return graphMatrix
 

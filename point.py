@@ -4,7 +4,7 @@ Nie da się zrobic fabryki [!]
 bo każdy z punktów  przestrzeni ma inny interfejs
 """
 from abc import ABCMeta, abstractmethod
-from random import uniform
+from random import uniform, randint
 
 from sphere import Sphere2D
 
@@ -122,8 +122,8 @@ class Point2D(Point1D):
         circleRange = sphereRadius**2
 
         while not (sphere2D.isCoordinatesInSphere(x, y)):
-            x = uniform((-1*circleRange), circleRange)
-            y = uniform((-1*circleRange), circleRange)
+            x = randint((-1*circleRange), circleRange)
+            y = randint((-1*circleRange), circleRange)
 
         return cls(x, y)
 
