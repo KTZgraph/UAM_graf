@@ -1,8 +1,8 @@
 from unittest import TestCase
 from mock import Mock
-from parameterized import parameterized, parameterized_class
+from parameterized import parameterized
 
-from transmitters import Point, CircleCalculator
+from grafy.api.transmitters import Point
 
 
 class PointTest(TestCase):

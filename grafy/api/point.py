@@ -4,9 +4,9 @@ Nie da się zrobic fabryki [!]
 bo każdy z punktów  przestrzeni ma inny interfejs
 """
 from abc import ABCMeta, abstractmethod
-from random import uniform, randint
+from random import randint
 
-from sphere import Sphere2D
+from api.sphere import Sphere2D
 
 
 class PointBase(metaclass=ABCMeta):

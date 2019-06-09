@@ -7,15 +7,15 @@ Zak�adam �e m�j okr�g zaczyna sie w punkcie 0,0 - ca�e miasto
 
 wiercho�ek jako nadajnik o odpowiendnim zasi�gu
 """
-from typing import Union, List
+from typing import Union
 from abc import ABCMeta, abstractmethod
 
-from Graph import Graph2D, GraphBase
-from global_sight_xml_converter import GlobalSightXMLConverter
+from api.Graph import Graph2D, GraphBase
+from api.global_sight_xml_converter import GlobalSightXMLConverter
 
-totalPointNumber = 2
-cityRadius = 10
-transmitterWeight = 5
+# totalPointNumber = 2
+# cityRadius = 10
+# transmitterWeight = 5
 
 
 class TransmittersBase(metaclass=ABCMeta):
@@ -59,12 +59,3 @@ class Transmitters2D(Transmitters1D):
     def convertToXML(self):
         """Zwraca macierz grafu z punnktami wierzchołków w postaci XML"""
         return GlobalSightXMLConverter.converToXml(self.grapnMatrix, self.point_list, self.weight)
-
-
-def main():
-    transmitters2D = Transmitters2D(totalPointNumber, cityRadius, transmitterWeight)
-    transmitters2D.convertToXML()
-
-if __name__ == "__main__":
-    main()
-

@@ -7,8 +7,8 @@ Graf w przestrzeni
 from abc import ABCMeta, abstractmethod
 import numpy as np
 
-from point import PointBase, Point1D, Point2D
-from sphere import Sphere2D, SphereBase
+from api.point import PointBase, Point1D, Point2D
+from api.sphere import Sphere2D, SphereBase
 
 
 class GraphBase(metaclass=ABCMeta):
