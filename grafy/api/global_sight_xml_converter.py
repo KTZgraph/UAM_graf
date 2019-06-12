@@ -26,7 +26,7 @@ class GlobalSightXMLConverter: #GlobalSightXMLConverter
 
             for column, point2 in zip(row, point_list):
                 if column > 0:
-                    neighbour = etree.Element("neighbour", x=str(point2.x), y=str(point2.y))
+                    neighbour = etree.Element("vertex", x=str(point2.x), y=str(point2.y))
                     vertex.append(neighbour)
 
 
