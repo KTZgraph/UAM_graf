@@ -9,7 +9,7 @@ class GlobalSightXMLConverter: #GlobalSightXMLConverter
     (nazwami tagów etc.) zdefiniowanymi przez programistę
     """
     @staticmethod
-    def converToXml(matrix, point_list, weight):
+    def converToXml(matrix, point_list, weight, cityRadius):
         """
         Konwertuje macierz na XML który jest potem wysyłany do Javacriptu
         bazując na:
@@ -17,9 +17,9 @@ class GlobalSightXMLConverter: #GlobalSightXMLConverter
             - http://docs.roxen.com/(en)/roxen/5.4/web_developer_manual/graphics/gxml.tag
             - https://metacpan.org/pod/XML::GXML
             - https://books.google.pl/books?id=BYxiIiFBJzkC&pg=PA250&lpg=PA250&dq=gxml+format&source=bl&ots=xs5TfO_ri8&sig=ACfU3U2nzmOwaq00i2dImuYKqIXuOZQwIQ&hl=pl&sa=X&ved=2ahUKEwiJp8mEw9riAhUCx4sKHUjvDFoQ6AEwDXoECAkQAQ#v=onepage&q=gxml%20format&f=false
+            :param cityRadius:
         """
-        root = etree.Element("root", weight=str(weight))
-        print(matrix)
+        root = etree.Element("root", weight=str(weight), cityRadius=str(cityRadius))
 
         for row, point1 in zip(matrix, point_list):
             vertex = etree.SubElement(root, "vertex", x=str(point1.x), y=str(point1.y))
@@ -30,5 +30,4 @@ class GlobalSightXMLConverter: #GlobalSightXMLConverter
                     vertex.append(neighbour)
 
 
-        print(etree.tostring(root, pretty_print=False))
         return etree.tostring(root, pretty_print=False)

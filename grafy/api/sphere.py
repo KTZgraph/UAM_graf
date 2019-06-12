@@ -75,7 +75,8 @@ class Sphere2D(SphereBase):
         if x is None or y is None:
             return False
 
-        if ((x - 0) ** 2 + (y - 0) ** 2) <= (self._radius ** 2):
+        if (((x - 0) ** 2) + ((y - 0) ** 2)) <= (self._radius ** 2):
             return True
+
         return False
 

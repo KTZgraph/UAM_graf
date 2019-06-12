@@ -119,11 +119,10 @@ class Point2D(Point1D):
         """
         sphere2D = Sphere2D(sphereRadius)
         x, y = None, None
-        circleRange = sphereRadius**2
 
         while not (sphere2D.isCoordinatesInSphere(x, y)):
-            x = randint((-1*circleRange), circleRange)
-            y = randint((-1*circleRange), circleRange)
+            x = randint((-1*sphereRadius), sphereRadius)
+            y = randint((-1*sphereRadius), sphereRadius)
 
         return cls(x, y)
 

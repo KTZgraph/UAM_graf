@@ -58,4 +58,4 @@ class Transmitters2D(Transmitters1D):
 
     def convertToXML(self):
         """Zwraca macierz grafu z punnktami wierzchołków w postaci XML"""
-        return GlobalSightXMLConverter.converToXml(self.grapnMatrix, self.point_list, self.weight)
+        return GlobalSightXMLConverter.converToXml(self.grapnMatrix, self.point_list, self.weight, self.cityRadius)

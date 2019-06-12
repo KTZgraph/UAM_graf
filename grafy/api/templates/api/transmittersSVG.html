@@ -1,20 +1,20 @@
 {% load static %}
 {% block content %}
 
-<!DOCTYPE <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Częstotliwość</title>
+    <title>Nadajniki</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> developer version vueJs  -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>  <!-- production vueJs link  -->
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>  <!-- production vueJs link  -->
+    <!--<script src="transmittersDraw.js"></script>  &lt;!&ndash; production vueJs link  &ndash;&gt;-->
     <!--<script src=".\d3.min.js" type="text/javascript" ></script>-->
     <!--bo rzga sie o ścieżkę-->
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 
 </head>
 
@@ -37,7 +37,13 @@
             <li>Macierz XML: [[matrixXML]]</li>
         </ul>
         [[ errorMessage ]]
+
+        <!-- Rysunek -->
+        <div id="drawing" align="center">
+            <svg style="width:1250px; height:1250px;" />
+        </div>
       </div>
+
 </body>
 </html>
 
@@ -73,8 +79,8 @@ var TransmittersVue = new Vue({
                 }).then(function(response){
                     TransmittersVue.pointList = response.data.pointList;
                     TransmittersVue.matrixXML = response.data.matrixXML;
-                    TransmittersVue.drawMatrix()
-                    TransmittersVue.errorMessage = response.data.errorMessage //response.data.errorMessage;
+                    TransmittersVue.drawMatrix();
+                    TransmittersVue.errorMessage = response.data.errorMessage; //response.data.errorMessage;
                 })
                 .catch(function(error){
                     TransmittersVue.errorMessage = "Javascript error: " + error;
@@ -84,20 +90,83 @@ var TransmittersVue = new Vue({
             TransmittersVue.errorMessage = "[Błąd] Nie podano wymaganych danych - prosze dopisć";
           }
     },
-    drawMatrix: function(){
+      drawMatrix: function(){
           //rysowanie macierzy z XML
-        // console.log(this.matrixXML)
         parser = new DOMParser();
         xmlDoc = parser.parseFromString(this.matrixXML,"text/xml");
-        // document.getElementById("demo").innerHTML =
-        console.log("AAAAAAAAAAAAAAAAA")
-        var rootElement = xmlDoc.getElementsByTagName("root");
 
+        //pobieranie elemnetu root
+        var rootElement = xmlDoc.getElementsByTagName("root")[0];
+          //zasięg nadajnika
+          this.transmittersWeight = parseInt(rootElement.getAttribute('weight'));
+          //zasieg miasta - cały okrąg
+          this.cityRadius = parseInt(rootElement.getAttribute('cityRadius'));
+          this.drawCitySphere();
 
-        console.log("A: ", rootElement[0].childNodes)
-    }
+        // rysowanie wierzchołków
+        let TransmittersVue = this;
+        rootElement.childNodes.forEach(function(vertex){
+            TransmittersVue.drawVertex(
+                parseInt(vertex.getAttribute('x')),
+                parseInt(vertex.getAttribute('y'))
+            );
+        })
+      },
+      drawCitySphere: function(){
+          // cały obszar kwadratu
+        d3.select("svg")
+          .style('width', this.cityRadius*2)
+          .style('height',this.cityRadius*2)
+          .style('border', "1px lightgray solid");
+
+          // żeby środek koła był w centrum prostokąta
+        d3.select("svg")
+        .append("circle")
+        .attr("r", this.cityRadius)
+        .attr("cx", this.cityRadius)
+        .attr("cy", this.cityRadius)
+        .style("fill", "pink");
+
+      },
+
+      drawVertex: function(x, y){
+          //rysowanie okręgu zawierajacego zasięg wierzchołka
+          d3.select("svg")
+            .append("circle")
+            .attr("r", this.transmittersWeight)
+            //przesuniecie, bo sordek okregu tez przesuwam
+            .attr("cx", x + this.cityRadius)
+            .attr("cy", y + this.cityRadius)
+            .style("fill", "green");
+
+          //rysowanie punktu
+          d3.select("svg")
+            .append("circle")
+            .attr("r", 2)
+            .attr("cx", x + this.cityRadius)
+            .attr("cy", y + this.cityRadius)
+            .style("fill", "black");
+      },
+
+      drawEdge:function(pointA, pointB){
+        //rysowanie krawędzi między dwoma punktami
+          d3.select("svg")
+            .append("line")
+            .attr("x1", pointA.x)
+            .attr("y1", pointA.y)
+            .attr("x2", pointB.x)
+            .attr("y2", pointB.y)
+            .style("fill", "black");
+      }
   }
+
 })
+
+
+
 </script>
+
+
+
 
 {% endblock %}
