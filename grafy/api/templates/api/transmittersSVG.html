@@ -126,7 +126,7 @@ var TransmittersVue = new Vue({
         .attr("r", this.cityRadius)
         .attr("cx", this.cityRadius)
         .attr("cy", this.cityRadius)
-        .style("fill", "pink");
+        .style("fill", "gray");
 
       },
 
@@ -145,6 +145,15 @@ var TransmittersVue = new Vue({
             .attr("cy", y + this.cityRadius)
             .style("fill", "green");
 
+
+          //jeśli wierzchołek ma zagnieżdżone wierzchołki - sasiadow, to rysuję krawędzie
+          let TransmittersVue = this;
+          vertex.childNodes.forEach(function(nestedVertex, index) {
+
+              //rysowanie krawedzi
+              TransmittersVue.drawEdge(vertex, nestedVertex);
+          });
+
           //rysowanie punktu
           d3.select("svg")
             .append("circle")
@@ -152,15 +161,6 @@ var TransmittersVue = new Vue({
             .attr("cx", x + this.cityRadius)
             .attr("cy", y + this.cityRadius)
             .style("fill", "black");
-
-
-          //jeśli wierzchołek ma zagnieżdżone wierzchołki - sasiadow, to rysuję krawędzie
-          let TransmittersVue = this;
-          vertex.childNodes.forEach(function(nestedVertex) {
-              // TransmittersVue.drawEdge(vertex, nestedVertex);
-              console.log("TUTAJ: ", nestedVertex);
-              TransmittersVue.drawEdge(vertex, nestedVertex);
-          });
       },
 
       drawEdge:function(vertexA, vertexB){
