@@ -107,11 +107,12 @@ var TransmittersVue = new Vue({
         let TransmittersVue = this;
         rootElement.childNodes.forEach(function(vertex){
             TransmittersVue.drawVertex(
-                parseInt(vertex.getAttribute('x')),
-                parseInt(vertex.getAttribute('y'))
+                vertex
             );
         })
       },
+
+
       drawCitySphere: function(){
           // cały obszar kwadratu
         d3.select("svg")
@@ -129,7 +130,12 @@ var TransmittersVue = new Vue({
 
       },
 
-      drawVertex: function(x, y){
+      drawVertex: function(vertex){
+          console.log("vertex: ", vertex);
+          //parsowanie głownego pnktu wierzchołka
+          let x = parseInt(vertex.getAttribute('x'));
+          let y = parseInt(vertex.getAttribute('y'));
+
           //rysowanie okręgu zawierajacego zasięg wierzchołka
           d3.select("svg")
             .append("circle")
@@ -146,16 +152,28 @@ var TransmittersVue = new Vue({
             .attr("cx", x + this.cityRadius)
             .attr("cy", y + this.cityRadius)
             .style("fill", "black");
+
+
+          //jeśli wierzchołek ma zagnieżdżone wierzchołki - sasiadow, to rysuję krawędzie
+          let TransmittersVue = this;
+          vertex.childNodes.forEach(function(nestedVertex) {
+              // TransmittersVue.drawEdge(vertex, nestedVertex);
+              console.log("TUTAJ: ", nestedVertex);
+              TransmittersVue.drawEdge(vertex, nestedVertex);
+          });
       },
 
-      drawEdge:function(pointA, pointB){
+      drawEdge:function(vertexA, vertexB){
         //rysowanie krawędzi między dwoma punktami
+          console.log("vertexA: ", vertexA.getAttribute('x'))
+          console.log("vertexB: ", vertexB)
           d3.select("svg")
             .append("line")
-            .attr("x1", pointA.x)
-            .attr("y1", pointA.y)
-            .attr("x2", pointB.x)
-            .attr("y2", pointB.y)
+            .style("stroke", "black")
+            .attr("x1", parseInt(vertexA.getAttribute('x')) + this.cityRadius)
+            .attr("y1", parseInt(vertexA.getAttribute('y')) + this.cityRadius)
+            .attr("x2", parseInt(vertexB.getAttribute('x')) + this.cityRadius)
+            .attr("y2", parseInt(vertexB.getAttribute('y')) + this.cityRadius)
             .style("fill", "black");
       }
   }
